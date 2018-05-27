@@ -1,5 +1,6 @@
+/*eslint-disable no-unused-vars*/
 import React from 'react';
-import { Layout, Button } from 'antd';
+import { Layout, Icon, Button } from 'antd';
 const { Content } = Layout;
 
 /** 
@@ -32,13 +33,15 @@ class Timer extends React.Component {
         });
     }
 
-    render = () => (
-        <Content style={{ padding: '30px', textAlign: 'center' }}>
-             <Button type="dashed" icon="plus" size="large">
-                {this.state.currentLocalTime}
-            </Button>
-        </Content>
-    );
+    render() {
+        return (
+            <Content style={{ padding: '0 30px', textAlign: 'center' }}>
+                <h3 style={{ fontSize: '55px', color: 'rgba(0, 0, 0, 0.65)', letterSpacing: '.5px' }}>
+                    {this.state.currentLocalTime}
+                </h3>
+            </Content >
+        );
+    }
 }
 
 export default Timer;
