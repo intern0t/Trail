@@ -2,7 +2,7 @@
   "name": "trail",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://intern0t.github.io/trail",
+  "homepage": "https://intern0t.github.io/Trail",
   "dependencies": {
     "antd": "^3.5.3",
     "react": "^16.4.0",
