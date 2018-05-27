@@ -17,7 +17,7 @@ class NewTask extends React.Component {
                 };
                 delete values.switch;
                 const newTaskContent = { ...values, ...addToValues };
-                console.log(newTaskContent);
+                // console.log(newTaskContent);
                 onNewTaskCreated(newTaskContent);
             }
         });

@@ -30,6 +30,7 @@ class ListContainer extends React.Component {
         return (
             <List
                 itemLayout="horizontal"
+                locale={{ emptyText: 'No recorded tasks yet! Record one by pressing Add New Task above.' }}
                 dataSource={tasks}
                 renderItem={task => (
                     <List.Item actions={[
