@@ -15,9 +15,17 @@ class Timer extends React.Component {
         }
     }
 
+    ticker() {
+        const { onTimeChange } = this.props;
+        this.setState({
+            currentLocalTime: new Date().toLocaleTimeString(),
+        });
+        onTimeChange(this.state.currentLocalTime);
+    }
+
     /* After the component is mounted, loaded. */
     componentDidMount() {
-        this.formattedTime = setInterval(() => this.tick(), 1000);
+        this.formattedTime = setInterval(() => this.ticker(), 1000);
     }
 
     /* When the Timer component isn't initialized, it's not use keeping the time. 
@@ -27,10 +35,8 @@ class Timer extends React.Component {
         clearInterval(this.formattedTime);
     }
 
-    tick = () => {
-        this.setState({
-            currentLocalTime: new Date().toLocaleTimeString(),
-        });
+    timeChanged() {
+        this.props.onTimeChange(this.state.currentLocalTime);
     }
 
     render() {
