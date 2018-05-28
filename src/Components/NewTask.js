@@ -14,6 +14,7 @@ class NewTask extends React.Component {
                     id: newTaskID,
                     timestamp: currentTime,
                     completed: values.switch,
+                    tag: "important",
                 };
                 delete values.switch;
                 const newTaskContent = { ...values, ...addToValues };

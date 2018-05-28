@@ -1,16 +1,7 @@
 /*eslint-disable no-unused-vars*/
 import React from 'react';
-import { List, Avatar, Button, Spin, Icon, Tooltip } from 'antd';
-
-const fakeData = {
-    "tasks": [
-        { "gender": "male", "name": { "title": "mr", "first": "ümit", "last": "abadan" }, "email": "ümit.abadan@example.com", "nat": "TR" },
-        { "gender": "female", "name": { "title": "ms", "first": "alicia", "last": "campos" }, "email": "alicia.campos@example.com", "nat": "ES" },
-        { "gender": "female", "name": { "title": "miss", "first": "ece", "last": "keçeci" }, "email": "ece.keçeci@example.com", "nat": "TR" },
-        { "gender": "female", "name": { "title": "madame", "first": "margot", "last": "henry" }, "email": "margot.henry@example.com", "nat": "CH" },
-        { "gender": "male", "name": { "title": "mr", "first": "corey", "last": "jennings" }, "email": "corey.jennings@example.com", "nat": "IE" }
-    ]
-};
+import { Layout, List, Avatar, Button, Spin, Icon, Tooltip, Row, Col, Tag } from 'antd';
+const { Content } = Layout;
 
 class ListContainer extends React.Component {
     state = {
@@ -24,13 +15,14 @@ class ListContainer extends React.Component {
             Tasks: tasks,
         });
     }
+    
     render() {
-        const { tasks, isComplete } = this.props;
+        const { tasks, emptytext, isComplete } = this.props;
 
         return (
             <List
                 itemLayout="horizontal"
-                locale={{ emptyText: 'No recorded tasks yet! Record one by pressing Add New Task above.' }}
+                locale={{ emptyText: emptytext }}
                 dataSource={tasks}
                 renderItem={task => (
                     <List.Item actions={[
@@ -51,7 +43,9 @@ class ListContainer extends React.Component {
                                 description={task.description}
                             />
                         }
-                        <div>{task.timestamp}</div>
+
+                        <Col span={12}>{task.timestamp}</Col>
+                        <Col span={12}><Tag color="red">Important</Tag></Col>
                     </List.Item>
                 )}
             />
