@@ -1,7 +1,8 @@
 /*eslint-disable no-unused-vars*/
 import React from 'react';
-import { Modal, Form, Icon, Input, Button, Switch, message } from 'antd';
+import { Modal, Form, Icon, Input, Button, Switch, message, Select } from 'antd';
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 class NewTask extends React.Component {
     newTaskFormHandleSubmit = (e) => {
@@ -14,14 +15,19 @@ class NewTask extends React.Component {
                     id: newTaskID,
                     timestamp: currentTime,
                     completed: values.switch,
-                    tag: "important",
+                    tagged: this.taggedAs,
                 };
                 delete values.switch;
                 const newTaskContent = { ...values, ...addToValues };
                 message.success("Successfully added your task ..");
+                console.log()
                 onNewTaskCreated(newTaskContent);
             }
         });
+    }
+
+    tagChanged = (value) => {
+        this.taggedAs = value;
     }
 
     newTaskFormSaveFormRef = (formRef) => {
@@ -57,6 +63,23 @@ class NewTask extends React.Component {
                             rules: [{ required: true, message: 'Please describe your task.' }],
                         })(
                             <Input type="textarea" />
+                        )}
+                    </FormItem>
+                    <FormItem
+                        label="Tag your task"
+                        hasFeedback
+                    >
+                        {getFieldDecorator('select', {
+                            rules: [
+                                { required: true, message: 'Please tag your task!' },
+                            ],
+                        })(
+                            <Select placeholder="Please tag this task .." onChange={this.tagChanged}>
+                                <Option value="critical">Critical</Option>
+                                <Option value="important">Important</Option>
+                                <Option value="priority">Priority</Option>
+                                <Option value="waiting">Waiting</Option>
+                            </Select>
                         )}
                     </FormItem>
                     <FormItem label="Task completion status">

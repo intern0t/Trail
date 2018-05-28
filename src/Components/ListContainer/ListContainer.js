@@ -15,9 +15,16 @@ class ListContainer extends React.Component {
             Tasks: tasks,
         });
     }
-    
+
     render() {
         const { tasks, emptytext, isComplete } = this.props;
+
+        const tagColorFor = {
+            critical: 'red',
+            important: 'orange',
+            priority: 'cyan',
+            waiting: 'purple',
+        };
 
         return (
             <List
@@ -32,7 +39,7 @@ class ListContainer extends React.Component {
                     ]}>
                         {(isComplete === true) ?
                             <List.Item.Meta
-                                avatar={<Avatar icon="check-square" style={{ backgroundColor: '#e6f7ff', color: '#1890ff' }} />}
+                                avatar={<Avatar icon="trophy" style={{ backgroundColor: '#e6f7ff', color: '#1890ff' }} />}
                                 title={<a href="https://ant.design">{task.title}</a>}
                                 description={task.description}
                             />
@@ -45,7 +52,7 @@ class ListContainer extends React.Component {
                         }
 
                         <Col span={12}>{task.timestamp}</Col>
-                        <Col span={12}><Tag color="red">Important</Tag></Col>
+                        <Col span={12}><Tag color={tagColorFor[task.tagged]} style={{ textTransform: 'uppercase', fontSize: '11px', letterSpacing: '.5px' }}>{task.tagged}</Tag></Col>
                     </List.Item>
                 )}
             />
