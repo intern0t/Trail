@@ -46,6 +46,16 @@ class MainLayout extends React.Component {
         localStorage.setItem("Tasks", JSON.stringify(newTaskList));
     };
 
+    /** Clear all tasks using reset button on sidebar. */
+    resetAllTasks = () => {
+        // Going an easy way on this one. haha
+        this.setState({
+            Tasks: [],
+        });
+        // Empty localStorage <Tasks> values as well.
+        localStorage.removeItem("Tasks");
+    };
+
     componentDidMount() {
         // Load our tasks from storage.
         if (localStorage.getItem("Tasks")) {
@@ -64,13 +74,16 @@ class MainLayout extends React.Component {
                     <Content style={{ textAlign: 'center', marginTop: '30px' }}>
                         <span mode="inline" style={{ width: '50px' }}>
                             <Tooltip placement="bottom" title="Trail">
-                                <a href="https://github.com/intern0t/Trail" style={{ fontSize: '40px', opacity: '.8' }}><Icon type="environment-o" /></a>
+                                <a href="https://github.com/intern0t/Trail" style={{ fontSize: '40px', opacity: '.8' }}>
+                                    <Icon type="environment-o" />
+                                </a>
                             </Tooltip>
                         </span>
                     </Content>
                     <Content style={{ padding: '0 50px', marginTop: '50px' }}>
                         <Layout style={{ padding: '24px 0', background: '#fff' }}>
-                            <Sidebar />
+                            <Sidebar
+                                onReset={this.resetAllTasks} />
                             <Content style={{ padding: '0 24px', minHeight: 280 }}>
                                 {/* Time */}
                                 <Timer

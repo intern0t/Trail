@@ -3,8 +3,8 @@ Trail is a personal, open-source project developed using ReactJS which is intend
 
 #### Remaining Task(s)
 1. Add button functionalities for our task entry.
-    * Delete, Mark as complete, Edit etc.
-2. Store our tasks in `localStorage` for the time being.
+    * Delete, Complete, Edit etc.
+2. ~~Store our tasks in `localStorage` for the time being.~~
     * I'll probably use this permanently as we have JSON Import/Export functionality planned. (*Remote storage, possible.*)
 3. Count total tasks in each categories and display it.
 4. Reset all Tasks.

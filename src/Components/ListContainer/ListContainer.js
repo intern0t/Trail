@@ -1,11 +1,13 @@
 /*eslint-disable no-unused-vars*/
 import React from 'react';
-import { Layout, List, Avatar, Button, Spin, Icon, Tooltip, Row, Col, Tag } from 'antd';
+import { Layout, List, Avatar, Button, Spin, Icon, Tooltip, Row, Col, Tag, Popconfirm, message } from 'antd';
 const { Content } = Layout;
 
 class ListContainer extends React.Component {
     state = {
         Tasks: [],
+        visible: false,
+        condition: true, // Whether meet the condition, if not show popconfirm.
     };
 
     componentDidMount() {
@@ -14,6 +16,10 @@ class ListContainer extends React.Component {
         this.setState({
             Tasks: tasks,
         });
+    }
+
+    confirm() {
+        message.info('Click on Yes.');
     }
 
     render() {
@@ -26,6 +32,11 @@ class ListContainer extends React.Component {
             waiting: 'purple',
         };
 
+        const confirmTexts = {
+            deleteTask: 'Are you sure delete this task?',
+            completeTask: 'Are you sure to mark this task as completed?'
+        };
+
         return (
             <List
                 itemLayout="horizontal"
@@ -33,9 +44,31 @@ class ListContainer extends React.Component {
                 dataSource={tasks}
                 renderItem={task => (
                     <List.Item actions={[
-                        <a><Tooltip title="Edit Task"><Icon type="edit" /></Tooltip></a>,
-                        <a><Tooltip title="Delete Task"><Icon style={{ color: '#f44242' }} type="close" /></Tooltip></a>,
-                        <a><Tooltip title="Complete Task"><Icon style={{ color: '#3e9b29' }} type="check" /></Tooltip></a>
+                        <a>
+                            <Tooltip title="Edit Task">
+                                <Icon type="edit" />
+                            </Tooltip>
+                        </a>,
+                        <Popconfirm
+                            placement="bottomRight"
+                            title={confirmTexts.deleteTask}
+                            onConfirm={this.confirm}
+                            okText="Yes"
+                            cancelText="No">
+                            <a>
+                                <Tooltip title="Delete Task"><Icon style={{ color: '#f44242' }} type="close" /></Tooltip>
+                            </a>
+                        </Popconfirm>,
+                        <Popconfirm
+                            placement="bottomRight"
+                            title={confirmTexts.completeTask}
+                            onConfirm={this.confirm}
+                            okText="Yes"
+                            cancelText="No">
+                            <a>
+                                <Tooltip title="Complete Task"><Icon style={{ color: '#3e9b29' }} type="check" /></Tooltip>
+                            </a>
+                        </Popconfirm>
                     ]}>
                         {(isComplete === true) ?
                             <List.Item.Meta

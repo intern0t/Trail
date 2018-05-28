@@ -17,10 +17,12 @@ class NewTask extends React.Component {
                     completed: values.switch,
                     tagged: this.taggedAs,
                 };
-                delete values.switch;
+
                 const newTaskContent = { ...values, ...addToValues };
+                delete newTaskContent.switch;
+                delete newTaskContent.select;
                 message.success("Successfully added your task ..");
-                console.log()
+                console.log(newTaskContent);
                 onNewTaskCreated(newTaskContent);
             }
         });
