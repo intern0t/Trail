@@ -1,6 +1,6 @@
 /*eslint-disable no-unused-vars*/
 import React from 'react';
-import { Modal, Form, Icon, Input, Button, Switch } from 'antd';
+import { Modal, Form, Icon, Input, Button, Switch, message } from 'antd';
 const FormItem = Form.Item;
 
 class NewTask extends React.Component {
@@ -17,7 +17,7 @@ class NewTask extends React.Component {
                 };
                 delete values.switch;
                 const newTaskContent = { ...values, ...addToValues };
-                // console.log(newTaskContent);
+                message.success("Successfully added your task ..");
                 onNewTaskCreated(newTaskContent);
             }
         });

@@ -25,7 +25,7 @@ class ListContainer extends React.Component {
         });
     }
     render() {
-        const { tasks } = this.props;
+        const { tasks, isComplete } = this.props;
 
         return (
             <List
@@ -38,11 +38,19 @@ class ListContainer extends React.Component {
                         <a><Tooltip title="Delete Task"><Icon style={{ color: '#f44242' }} type="close" /></Tooltip></a>,
                         <a><Tooltip title="Complete Task"><Icon style={{ color: '#3e9b29' }} type="check" /></Tooltip></a>
                     ]}>
-                        <List.Item.Meta
-                            avatar={<Avatar icon="check-square-o" />}
-                            title={<a href="https://ant.design">{task.title}</a>}
-                            description={task.description}
-                        />
+                        {(isComplete === true) ?
+                            <List.Item.Meta
+                                avatar={<Avatar icon="check-square" style={{ backgroundColor: '#e6f7ff', color: '#1890ff' }} />}
+                                title={<a href="https://ant.design">{task.title}</a>}
+                                description={task.description}
+                            />
+                            :
+                            <List.Item.Meta
+                                avatar={<Avatar icon="hourglass" style={{ backgroundColor: 'transparent', color: 'rgba(0, 0, 0, 0.15)' }} />}
+                                title={<a href="https://ant.design">{task.title}</a>}
+                                description={task.description}
+                            />
+                        }
                         <div>{task.timestamp}</div>
                     </List.Item>
                 )}
