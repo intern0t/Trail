@@ -42,9 +42,9 @@ class Timer extends React.Component {
     render() {
         return (
             <Content style={{ padding: '0 30px', textAlign: 'center' }}>
-                <h3 style={{ fontSize: '55px', color: 'rgba(0, 0, 0, 0.65)', letterSpacing: '.5px' }}>
+                <h1 style={{ color: 'rgba(0, 0, 0, 0.65)', letterSpacing: '.5px' }}>
                     {this.state.currentLocalTime}
-                </h3>
+                </h1>
             </Content >
         );
     }

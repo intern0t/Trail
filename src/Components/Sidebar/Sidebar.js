@@ -4,14 +4,34 @@ const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
 class Sidebar extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            collapsed: false,
+        };
+    }
+
     taskReset = () => {
         const { onReset } = this.props;
         onReset(true);
     }
 
+    siderToggle = () => {
+        this.setState({
+            collapsed: !this.state.collapsed,
+        });
+    }
+
     render() {
         return (
-            <Sider width={200} style={{ background: '#fff' }}>
+            <Sider
+                width={200}
+                style={{ background: '#fff' }}
+                trigger={null}
+                collapsible
+                collapsed={this.state.collapsed}
+            >
                 <div className="logo" />
                 <Menu theme="light"
                     mode="inline"
@@ -46,6 +66,14 @@ class Sidebar extends React.Component {
                     <Menu.Item key="7">
                         <Icon type="notification" />
                         <span>Credits</span>
+                    </Menu.Item>
+                    <Menu.Item key="8"
+                        onClick={this.siderToggle}>
+                        <Icon
+                            className="trigger"
+                            type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                        />
+                        <span>{this.state.collapsed ? 'Unfold' : 'Fold'}</span>
                     </Menu.Item>
                 </Menu>
             </Sider>

@@ -27,10 +27,17 @@ class MainLayout extends React.Component {
         this.setState(state => ({
             ...state, newTaskFormVisible: true
         }));
+
+
     }
     timeChanged = time => {
         this.loggedTime = time;
     };
+
+    generateNewTimeStamp = () => {
+        return (+ new Date().getTime());
+    }
+
 
     /** Created a new task (trail) so lets add it to our Tasks[]. */
     newTaskCreated = (newTask) => {
@@ -109,6 +116,8 @@ class MainLayout extends React.Component {
     render() {
         const WrappedTaskForm = Form.create()(NewTask);
         const { Tasks } = this.state;
+
+
         return (
             <div>
                 <Layout>
@@ -139,7 +148,7 @@ class MainLayout extends React.Component {
                                 <WrappedTaskForm
                                     visible={this.state.newTaskFormVisible}
                                     onCancel={this.newTaskFormHandleCancel}
-                                    newTaskID={this.state.Tasks.length + 1}
+                                    newTaskID={this.generateNewTimeStamp()}
                                     onNewTaskCreated={this.newTaskCreated}
                                     currentTime={this.loggedTime}
                                 />
