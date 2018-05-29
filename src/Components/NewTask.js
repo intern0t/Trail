@@ -14,7 +14,7 @@ class NewTask extends React.Component {
                 let addToValues = {
                     id: newTaskID,
                     timestamp: currentTime,
-                    completed: values.switch,
+                    completed: (values.switch === undefined || values.Switch === null ? false : true),
                     tagged: this.taggedAs,
                 };
 

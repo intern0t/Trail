@@ -13,14 +13,20 @@ class ListContainer extends React.Component {
     componentDidMount() {
         const { tasks } = this.props;
 
-        this.setState({
-            Tasks: tasks,
-        });
+        this.setState(state => ({
+            ...state, Tasks: tasks,
+        }));
     }
 
-    confirm() {
-        message.info('Click on Yes.');
-    }
+    deleteTaskConfirmed = (taskID) => {
+        const { onDelete } = this.props;
+        onDelete(taskID);
+    };
+
+    completeTaskConfirmed = (taskID) => {
+        const { onComplete } = this.props;
+        onComplete(taskID);
+    };
 
     render() {
         const { tasks, emptytext, isComplete } = this.props;
@@ -30,6 +36,7 @@ class ListContainer extends React.Component {
             important: 'orange',
             priority: 'cyan',
             waiting: 'purple',
+            complete: 'green'
         };
 
         const confirmTexts = {
@@ -43,7 +50,7 @@ class ListContainer extends React.Component {
                 locale={{ emptyText: emptytext }}
                 dataSource={tasks}
                 renderItem={task => (
-                    <List.Item actions={[
+                    <List.Item actions={(isComplete !== true) ? [
                         <a>
                             <Tooltip title="Edit Task">
                                 <Icon type="edit" />
@@ -52,7 +59,7 @@ class ListContainer extends React.Component {
                         <Popconfirm
                             placement="bottomRight"
                             title={confirmTexts.deleteTask}
-                            onConfirm={this.confirm}
+                            onConfirm={() => this.deleteTaskConfirmed(task.id)}
                             okText="Yes"
                             cancelText="No">
                             <a>
@@ -62,14 +69,41 @@ class ListContainer extends React.Component {
                         <Popconfirm
                             placement="bottomRight"
                             title={confirmTexts.completeTask}
-                            onConfirm={this.confirm}
+                            onConfirm={() => this.completeTaskConfirmed(task.id)}
                             okText="Yes"
                             cancelText="No">
                             <a>
                                 <Tooltip title="Complete Task"><Icon style={{ color: '#3e9b29' }} type="check" /></Tooltip>
                             </a>
                         </Popconfirm>
-                    ]}>
+                    ] : [
+                            <a>
+                                <Tooltip title="Edit Task">
+                                    <Icon type="edit" />
+                                </Tooltip>
+                            </a>,
+                            <Popconfirm
+                                placement="bottomRight"
+                                title={confirmTexts.deleteTask}
+                                onConfirm={() => this.deleteTaskConfirmed(task.id)}
+                                okText="Yes"
+                                cancelText="No">
+                                <a>
+                                    <Tooltip title="Delete Task"><Icon style={{ color: '#f44242' }} type="close" /></Tooltip>
+                                </a>
+                            </Popconfirm>,
+                            <Popconfirm
+                                placement="bottomRight"
+                                title={confirmTexts.completeTask}
+                                onConfirm={() => this.completeTaskConfirmed(task.id)}
+                                okText="Yes"
+                                cancelText="No">
+                                <a>
+                                    <Tooltip title="Mark as incomplete"><Icon style={{ color: '#3e9b29' }} type="rollback" /></Tooltip>
+                                </a>
+                            </Popconfirm>
+                        ]
+                    }>
                         {(isComplete === true) ?
                             <List.Item.Meta
                                 avatar={<Avatar icon="trophy" style={{ backgroundColor: '#e6f7ff', color: '#1890ff' }} />}
@@ -85,7 +119,10 @@ class ListContainer extends React.Component {
                         }
 
                         <Col span={12}>{task.timestamp}</Col>
-                        <Col span={12}><Tag color={tagColorFor[task.tagged]} style={{ textTransform: 'uppercase', fontSize: '11px', letterSpacing: '.5px' }}>{task.tagged}</Tag></Col>
+                        <Col span={12}>
+                            <Tag color={tagColorFor[task.tagged]} style={{ textTransform: 'uppercase', fontSize: '11px', letterSpacing: '.5px' }}>{task.tagged}</Tag>
+                            {(isComplete === true) ? <Tag color={tagColorFor.complete} style={{ textTransform: 'uppercase', fontSize: '11px', letterSpacing: '.5px' }}>Completed</Tag> : ''}
+                        </Col>
                     </List.Item>
                 )}
             />

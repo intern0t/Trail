@@ -17,9 +17,9 @@ class Timer extends React.Component {
 
     ticker() {
         const { onTimeChange } = this.props;
-        this.setState({
-            currentLocalTime: new Date().toLocaleTimeString(),
-        });
+        this.setState(state => ({
+            ...state, currentLocalTime: new Date().toLocaleTimeString(),
+        }));
         onTimeChange(this.state.currentLocalTime);
     }
 

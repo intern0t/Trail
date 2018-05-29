@@ -16,7 +16,7 @@ class Sidebar extends React.Component {
                 <Menu theme="light"
                     mode="inline"
                     defaultSelectedKeys={['1']}
-                    defaultOpenKeys={['sub1']}
+                    // defaultOpenKeys={['sub1']}
                     style={{ height: '100%' }}>
                     <Menu.Item key="1">
                         <Icon type="home" />

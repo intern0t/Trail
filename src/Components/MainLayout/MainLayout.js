@@ -4,7 +4,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import ListContainer from '../ListContainer/ListContainer';
 import Timer from '../Timer';
 import NewTask from '../NewTask';
-import { Layout, Icon, Divider, Button, Form, Tooltip } from 'antd';
+import { Layout, Icon, Divider, Button, Form, Tooltip, message } from 'antd';
 const { Content, Footer } = Layout;
 
 class MainLayout extends React.Component {
@@ -19,16 +19,15 @@ class MainLayout extends React.Component {
     }
 
     newTaskFormHandleCancel = () => {
-        this.setState({
-            newTaskFormVisible: false
-        });
+        this.setState(state => ({
+            ...state, newTaskFormVisible: false
+        }));
     }
     showNewTaskForm = (timeData) => {
-        this.setState({
-            newTaskFormVisible: true
-        });
+        this.setState(state => ({
+            ...state, newTaskFormVisible: true
+        }));
     }
-
     timeChanged = time => {
         this.loggedTime = time;
     };
@@ -37,10 +36,12 @@ class MainLayout extends React.Component {
     newTaskCreated = (newTask) => {
         /** <task> is an object with { id, timestamp, title, description, status } */
         const newTaskList = this.state.Tasks.concat(newTask);
-        this.setState({
+        newTaskList.sort();
+        this.setState(state => ({
+            ...state,
             Tasks: newTaskList,
             newTaskFormVisible: false,
-        });
+        }));
 
         // Set localStorage <Tasks>
         localStorage.setItem("Tasks", JSON.stringify(newTaskList));
@@ -49,20 +50,60 @@ class MainLayout extends React.Component {
     /** Clear all tasks using reset button on sidebar. */
     resetAllTasks = () => {
         // Going an easy way on this one. haha
-        this.setState({
-            Tasks: [],
-        });
+        this.setState(state => ({
+            ...state, Tasks: [],
+        }));
+
         // Empty localStorage <Tasks> values as well.
         localStorage.removeItem("Tasks");
+        message.info("Successfully reset your tasks..");
     };
 
-    componentDidMount() {
+    /** Deleting a task from our Tasks list. */
+    taskDelete = (taskID) => {
+        const newTaskListAfterDeleting = this.state.Tasks.filter(task => task.id !== taskID);
+        newTaskListAfterDeleting.sort();
+        this.setState(state => ({ ...state, Tasks: newTaskListAfterDeleting }));
+
+        localStorage.setItem("Tasks", JSON.stringify(newTaskListAfterDeleting));
+        message.warning("Deleted a task!");
+    };
+
+    taskComplete = (taskID) => {
+        // Thanks systemfault @ Freenode #reactjs
+        // const newTaskList = this.state.Tasks.map(task => task.id === taskID ? { ...task, completed: true } : task);
+        // this.setState(state => ({ ...state, Tasks: newTaskList }));
+        // /** Set localStorage right away! */
+        // localStorage.setItem("Tasks", JSON.stringify(newTaskList));
+        // message.success("Marked as complete.");
+
+        const newTaskList = this.state.Tasks.map(task => task.id === taskID ? { ...task, completed: !task.completed } : task);
+        newTaskList.sort();
+        this.setState(state => ({ ...state, Tasks: newTaskList }));
+
+        // const listData = this.state.Tasks.filter(task => task.id === taskID);
+        // console.log(listData);
+        /** Set localStorage right away! */
+        localStorage.setItem("Tasks", JSON.stringify(newTaskList));
+        message.success("Marked as complete.");
+    };
+
+    componentWillMount() {
         // Load our tasks from storage.
+        /** Let's compare which version of Tasks is ahead. */
         if (localStorage.getItem("Tasks")) {
-            this.setState({
-                Tasks: JSON.parse(localStorage.getItem("Tasks"))
-            });
-        } else { }
+            const lsTasks = JSON.parse(localStorage.getItem("Tasks"));
+
+            if (lsTasks.length > this.state.Tasks.length) {
+                // Seems like localStorage has more tasks on it, load that.
+                this.setState(state => ({ ...state, Tasks: lsTasks }));
+            } else {
+                /** Set our tasks to localStorage. */
+                localStorage.setItem("Tasks", this.state.Tasks);
+            }
+        } else {
+            /** Start off normally with empty Tasks list. */
+        }
     }
 
     render() {
@@ -74,7 +115,7 @@ class MainLayout extends React.Component {
                     <Content style={{ textAlign: 'center', marginTop: '30px' }}>
                         <span mode="inline" style={{ width: '50px' }}>
                             <Tooltip placement="bottom" title="Trail">
-                                <a href="https://github.com/intern0t/Trail" style={{ fontSize: '40px', opacity: '.8' }}>
+                                <a href="https://github.com/intern0t/Trail" style={{ color: 'rgba(0, 0, 0, 0.55)', fontSize: '40px', opacity: '.8' }}>
                                     <Icon type="environment-o" />
                                 </a>
                             </Tooltip>
@@ -104,14 +145,18 @@ class MainLayout extends React.Component {
                                 />
                                 <Divider orientation="left"><Icon type="profile" /> Your Recorded Tasks</Divider>
                                 <ListContainer
-                                    tasks={Tasks.filter(task => task.completed !== true)}
+                                    tasks={Tasks.filter(task => task.completed === false)}
                                     isComplete={false}
+                                    onDelete={this.taskDelete}
+                                    onComplete={this.taskComplete}
                                     emptytext='No recorded tasks yet! Record one by pressing Add New Task above.' />
 
                                 <Divider orientation="left"><Icon type="book" /> Completed Tasks</Divider>
                                 <ListContainer
                                     tasks={Tasks.filter(task => task.completed === true)}
                                     isComplete={true}
+                                    onDelete={this.taskDelete}
+                                    onComplete={this.taskComplete}
                                     emptytext='No completed tasks yet!' />
                             </Content>
                         </Layout>
