@@ -75,7 +75,7 @@ class ListContainer extends React.Component {
                             cancelText="No">
                             <a>
                                 <Tooltip
-                                    title="Complete Task">
+                                    title={isComplete ? "Mark as incomplete" : "Mark as complete"}>
                                     <Icon style={{ color: '#3e9b29' }} type={isComplete ? 'rollback' : 'check'} />
                                 </Tooltip>
                             </a>

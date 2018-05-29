@@ -10,7 +10,7 @@ Trail is a personal, open-source project developed using ReactJS which is intend
         * [x] Marks as complete.
         * [ ] Log the timestamp?
     * [ ] Edit task
-2. * [x] Storing our tasks.
+2. Storing our tasks.
     * [x] Store our tasks in `localStorage`. I'll probably use this permanently as I have JSON Import/Export functionality planned. (*Remote storage, possible.*)
     * [ ] Import and Export functionalities.
 3. Reset all Tasks.
