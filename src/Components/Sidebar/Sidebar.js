@@ -58,8 +58,8 @@ class Sidebar extends React.Component {
                         <span>Customize</span>
                     </Menu.Item>
                     <Menu.Item key="6">
-                        <Icon type="rollback" />
                         <Popconfirm placement="right" title="Are you sure you wish to reset all tasks?" onConfirm={this.taskReset} okText="Yes" cancelText="No">
+                            <Icon type="rollback" />
                             <span>Reset</span>
                         </Popconfirm>
                     </Menu.Item>

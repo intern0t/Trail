@@ -23,9 +23,9 @@ class ListContainer extends React.Component {
         onDelete(taskID);
     };
 
-    completeTaskConfirmed = (taskID) => {
+    completeTaskConfirmed = (taskID, isCompleteOrNot) => {
         const { onComplete } = this.props;
-        onComplete(taskID);
+        onComplete(taskID, isCompleteOrNot);
     };
 
     render() {
@@ -41,7 +41,8 @@ class ListContainer extends React.Component {
 
         const confirmTexts = {
             deleteTask: 'Are you sure delete this task?',
-            completeTask: 'Are you sure to mark this task as completed?'
+            completeTask: 'Are you sure to mark this task as completed?',
+            incompleteTask: 'Are you sure you want to mark this task as incomplete?',
         };
 
         return (
@@ -50,7 +51,7 @@ class ListContainer extends React.Component {
                 locale={{ emptyText: emptytext }}
                 dataSource={tasks}
                 renderItem={task => (
-                    <List.Item actions={(isComplete !== true) ? [
+                    <List.Item actions={[
                         <a>
                             <Tooltip title="Edit Task">
                                 <Icon type="edit" />
@@ -68,42 +69,18 @@ class ListContainer extends React.Component {
                         </Popconfirm>,
                         <Popconfirm
                             placement="bottomRight"
-                            title={confirmTexts.completeTask}
-                            onConfirm={() => this.completeTaskConfirmed(task.id)}
+                            title={isComplete ? confirmTexts.incompleteTask : confirmTexts.completeTask}
+                            onConfirm={() => this.completeTaskConfirmed(task.id, task.completed)}
                             okText="Yes"
                             cancelText="No">
                             <a>
-                                <Tooltip title="Complete Task"><Icon style={{ color: '#3e9b29' }} type="check" /></Tooltip>
+                                <Tooltip
+                                    title="Complete Task">
+                                    <Icon style={{ color: '#3e9b29' }} type={isComplete ? 'rollback' : 'check'} />
+                                </Tooltip>
                             </a>
                         </Popconfirm>
-                    ] : [
-                            <a>
-                                <Tooltip title="Edit Task">
-                                    <Icon type="edit" />
-                                </Tooltip>
-                            </a>,
-                            <Popconfirm
-                                placement="bottomRight"
-                                title={confirmTexts.deleteTask}
-                                onConfirm={() => this.deleteTaskConfirmed(task.id)}
-                                okText="Yes"
-                                cancelText="No">
-                                <a>
-                                    <Tooltip title="Delete Task"><Icon style={{ color: '#f44242' }} type="close" /></Tooltip>
-                                </a>
-                            </Popconfirm>,
-                            <Popconfirm
-                                placement="bottomRight"
-                                title={confirmTexts.completeTask}
-                                onConfirm={() => this.completeTaskConfirmed(task.id)}
-                                okText="Yes"
-                                cancelText="No">
-                                <a>
-                                    <Tooltip title="Mark as incomplete"><Icon style={{ color: '#3e9b29' }} type="rollback" /></Tooltip>
-                                </a>
-                            </Popconfirm>
-                        ]
-                    }>
+                    ]}>
                         {(isComplete === true) ?
                             <List.Item.Meta
                                 avatar={<Avatar icon="trophy" style={{ backgroundColor: '#e6f7ff', color: '#1890ff' }} />}

@@ -38,7 +38,6 @@ class MainLayout extends React.Component {
         return (+ new Date().getTime());
     }
 
-
     /** Created a new task (trail) so lets add it to our Tasks[]. */
     newTaskCreated = (newTask) => {
         /** <task> is an object with { id, timestamp, title, description, status } */
@@ -76,23 +75,17 @@ class MainLayout extends React.Component {
         message.warning("Deleted a task!");
     };
 
-    taskComplete = (taskID) => {
-        // Thanks systemfault @ Freenode #reactjs
-        // const newTaskList = this.state.Tasks.map(task => task.id === taskID ? { ...task, completed: true } : task);
-        // this.setState(state => ({ ...state, Tasks: newTaskList }));
-        // /** Set localStorage right away! */
-        // localStorage.setItem("Tasks", JSON.stringify(newTaskList));
-        // message.success("Marked as complete.");
-
+    taskComplete = (taskID, taskCompletionState) => {
         const newTaskList = this.state.Tasks.map(task => task.id === taskID ? { ...task, completed: !task.completed } : task);
         newTaskList.sort();
         this.setState(state => ({ ...state, Tasks: newTaskList }));
-
-        // const listData = this.state.Tasks.filter(task => task.id === taskID);
-        // console.log(listData);
         /** Set localStorage right away! */
         localStorage.setItem("Tasks", JSON.stringify(newTaskList));
-        message.success("Marked as complete.");
+        
+        (taskCompletionState !== false) ? 
+            message.error("Marked the task as incomplete.")
+            :
+            message.success("Marked the task as complete!");
     };
 
     componentWillMount() {
