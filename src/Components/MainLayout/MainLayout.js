@@ -5,6 +5,7 @@ import ListContainer from '../ListContainer/ListContainer';
 import Timer from '../Timer';
 import NewTask from '../NewTask';
 import { Layout, Icon, Divider, Button, Form, Tooltip, message } from 'antd';
+import EditTask from '../EditTask';
 const { Content, Footer } = Layout;
 
 class MainLayout extends React.Component {
@@ -13,8 +14,9 @@ class MainLayout extends React.Component {
 
         this.state = {
             Tasks: [],
-            // currentTime: "Initial Time",
+            toEditTask: null,
             newTaskFormVisible: false,
+            editTaskFormVisible: false,
         };
     }
 
@@ -27,9 +29,8 @@ class MainLayout extends React.Component {
         this.setState(state => ({
             ...state, newTaskFormVisible: true
         }));
-
-
     }
+
     timeChanged = time => {
         this.loggedTime = time;
     };
@@ -52,6 +53,49 @@ class MainLayout extends React.Component {
         // Set localStorage <Tasks>
         localStorage.setItem("Tasks", JSON.stringify(newTaskList));
     };
+
+    /** Edit a task */
+    editTaskVisibleHandle = (toHandleTask) => {
+        this.setState(state => ({
+            ...state, editTaskFormVisible: true
+        }));
+    };
+
+    editTaskFormHandleCancel = () => {
+        this.setState(state => ({
+            ...state, editTaskFormVisible: false
+        }));
+    }
+
+    showNewEditForm = (_toEditTask) => {
+        const newUpdates = { editTaskFormVisible: true, toEditTask: _toEditTask };
+        this.setState(state => ({
+            ...state, newUpdates
+        }));
+    }
+
+    onTaskEdited = (_task) => {
+        // Get the edited task and find the ID that the task resides in our Task array.
+        const editedTask = { ...this.state.Tasks.filter(task => task.id === _task.id), ..._task };
+        // Get task's position.
+        const taskPositionInTasks = this.state.Tasks.findIndex(task => task.id === _task.id);
+
+        // Duplicate our Tasks.
+        const newTasks = this.state.Tasks;
+        // Replace our old task with a newly edited one.
+        newTasks.splice(taskPositionInTasks, 1, editedTask);
+
+        // Set the state.
+        this.setState(state => ({
+            Tasks: newTasks,
+            editTaskFormVisible: false,
+        }));
+
+        /** Set localStorage right away! */
+        localStorage.setItem("Tasks", JSON.stringify(this.state.Tasks));
+
+        message.info("Successfully edited the task.");
+    }
 
     /** Clear all tasks using reset button on sidebar. */
     resetAllTasks = () => {
@@ -81,12 +125,21 @@ class MainLayout extends React.Component {
         this.setState(state => ({ ...state, Tasks: newTaskList }));
         /** Set localStorage right away! */
         localStorage.setItem("Tasks", JSON.stringify(newTaskList));
-        
-        (taskCompletionState !== false) ? 
+
+        (taskCompletionState !== false) ?
             message.error("Marked the task as incomplete.")
             :
             message.success("Marked the task as complete!");
     };
+
+    /** Editing a task using callback. */
+    taskEditHandle = (taskID) => {
+        const toEditTask = this.state.Tasks.filter(task => task.id === taskID)[0];
+        const updatedEditState = { editTaskFormVisible: true, toEditTask, }
+        this.setState(state => ({
+            ...state, ...updatedEditState
+        }))
+    }
 
     componentWillMount() {
         // Load our tasks from storage.
@@ -107,9 +160,9 @@ class MainLayout extends React.Component {
     }
 
     render() {
-        const WrappedTaskForm = Form.create()(NewTask);
+        const WrappedNewTaskForm = Form.create()(NewTask);
+        const WrappedEdiTaskForm = Form.create()(EditTask);
         const { Tasks } = this.state;
-
 
         return (
             <div>
@@ -138,12 +191,18 @@ class MainLayout extends React.Component {
                                         icon="plus"
                                         onClick={this.showNewTaskForm}>Add new task</Button>
                                 </center>
-                                <WrappedTaskForm
+                                <WrappedNewTaskForm
                                     visible={this.state.newTaskFormVisible}
                                     onCancel={this.newTaskFormHandleCancel}
                                     newTaskID={this.generateNewTimeStamp()}
                                     onNewTaskCreated={this.newTaskCreated}
                                     currentTime={this.loggedTime}
+                                />
+                                <WrappedEdiTaskForm
+                                    visible={this.state.editTaskFormVisible}
+                                    onCancel={this.editTaskFormHandleCancel}
+                                    taskToEdit={this.state.toEditTask}
+                                    editTaskHandle={this.onTaskEdited}
                                 />
                                 <Divider orientation="left"><Icon type="profile" /> Your Recorded Tasks</Divider>
                                 <ListContainer
@@ -151,14 +210,15 @@ class MainLayout extends React.Component {
                                     isComplete={false}
                                     onDelete={this.taskDelete}
                                     onComplete={this.taskComplete}
+                                    onEdit={this.taskEditHandle}
                                     emptytext='No recorded tasks yet! Record one by pressing Add New Task above.' />
-
                                 <Divider orientation="left"><Icon type="book" /> Completed Tasks</Divider>
                                 <ListContainer
                                     tasks={Tasks.filter(task => task.completed === true)}
                                     isComplete={true}
                                     onDelete={this.taskDelete}
                                     onComplete={this.taskComplete}
+                                    onEdit={this.taskEditHandle}
                                     emptytext='No completed tasks yet!' />
                             </Content>
                         </Layout>
