@@ -129,7 +129,10 @@ class ListContainer extends React.Component {
                             <Col span={12}>{task.timestamp}</Col>
                             <Col span={12}>
                                 <Tag color={tagColorFor[task.tagged]} style={{ textTransform: 'uppercase', fontSize: '11px', letterSpacing: '.5px' }}>{task.tagged}</Tag>
-                                {(isComplete === true) ? <Tag color={tagColorFor.complete} style={{ textTransform: 'uppercase', fontSize: '11px', letterSpacing: '.5px' }}>Completed</Tag> : ''}
+                                {(isComplete === true) ? 
+                                    <Tooltip placement="bottom" title={`Completed at ${task.completedAt}`}>
+                                        <Tag color={tagColorFor.complete} style={{ textTransform: 'uppercase', fontSize: '11px', letterSpacing: '.5px' }}>Completed</Tag>
+                                    </Tooltip> : ''}
                             </Col>
                         </List.Item>
                     )}

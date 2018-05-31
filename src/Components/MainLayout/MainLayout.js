@@ -74,6 +74,15 @@ class MainLayout extends React.Component {
         }));
     }
 
+    /** Editing a task using callback. */
+    taskEditHandle = (taskID) => {
+        const toEditTask = this.state.Tasks.filter(task => task.id === taskID)[0];
+        const updatedEditState = { editTaskFormVisible: true, toEditTask, }
+        this.setState(state => ({
+            ...state, ...updatedEditState
+        }))
+    }
+
     onTaskEdited = (_task) => {
         // Get the edited task and find the ID that the task resides in our Task array.
         const editedTask = { ...this.state.Tasks.filter(task => task.id === _task.id), ..._task };
@@ -120,9 +129,13 @@ class MainLayout extends React.Component {
     };
 
     taskComplete = (taskID, taskCompletionState) => {
-        const newTaskList = this.state.Tasks.map(task => task.id === taskID ? { ...task, completed: !task.completed } : task);
+        // Set completed timestamp.
+        const toUpdateValues = { completedAt: this.loggedTime };
+        const newTaskList = this.state.Tasks.map(task => task.id === taskID ? { ...task, ...toUpdateValues, completed: !task.completed } : task);
+        // console.log(newTaskList);
         newTaskList.sort();
         this.setState(state => ({ ...state, Tasks: newTaskList }));
+
         /** Set localStorage right away! */
         localStorage.setItem("Tasks", JSON.stringify(newTaskList));
 
@@ -131,15 +144,6 @@ class MainLayout extends React.Component {
             :
             message.success("Marked the task as complete!");
     };
-
-    /** Editing a task using callback. */
-    taskEditHandle = (taskID) => {
-        const toEditTask = this.state.Tasks.filter(task => task.id === taskID)[0];
-        const updatedEditState = { editTaskFormVisible: true, toEditTask, }
-        this.setState(state => ({
-            ...state, ...updatedEditState
-        }))
-    }
 
     componentWillMount() {
         // Load our tasks from storage.
