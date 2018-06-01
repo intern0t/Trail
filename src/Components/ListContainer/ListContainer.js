@@ -35,20 +35,6 @@ class ListContainer extends React.Component {
         onComplete(taskID, isCompleteOrNot);
     };
 
-    // setTaskToEdit(taskID) {
-    //     const { onEdit } = this.props;
-    //     const ourTask = this.state.Tasks.filter(task => task.id === taskID)[0];
-    //     const newStateUpdateEdit = { toEditTask: ourTask, visible: true };
-
-    //     this.setState(state => ({
-    //         ...state, ...newStateUpdateEdit
-    //     }));
-
-    //     // Call after edit completion through our form.
-    //     onEdit(ourTask);
-    //     // console.log(this.state.toEditTask);
-    // }
-
     editTaskHandle = (taskID) => {
         const { onEdit } = this.props;
         onEdit(taskID);

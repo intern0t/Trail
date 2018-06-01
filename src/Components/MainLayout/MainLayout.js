@@ -145,6 +145,39 @@ class MainLayout extends React.Component {
             message.success("Marked the task as complete!");
     };
 
+    /** Exporting a Tasks list. */
+    exportTasks = () => {
+        /**
+         * Blob for immutable file-like object - https://devdocs.io/dom/blob
+         * Creating a hidden link element - https://devdocs.io/dom/document/createelement
+         * Attributes - https://devdocs.io/html/element/link
+         */
+        if (this.state.Tasks.length > 0) {
+            let tasksToExport = JSON.stringify(this.state.Tasks);
+            let exportWithHeader = "data:application/json;charset=utf-8," + encodeURIComponent(tasksToExport);
+            let exportDate = new Date().toJSON().slice(0, 10).replace(/\//g, '-') + ".json";
+            // console.log(exportWithHeader, exportDate);
+            let blob = new Blob([tasksToExport], { type: 'text/json;charset=utf-8;' });
+
+            let downloadLink = document.createElement('a');
+            let url = URL.createObjectURL(blob);
+            downloadLink.setAttribute("href", url);
+            downloadLink.setAttribute("download", exportDate);
+            downloadLink.style.visibility = "hidden";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            message.success("Tasks successfully exported with the filename : " + exportDate);
+        } else {
+            // No Tasks to export.
+            message.error("There are no tasks to export, please create a task first.");
+        }
+
+    };
+
+    /** Importing a Task list. */
+    importTasks = () => { };
+
     componentWillMount() {
         // Load our tasks from storage.
         /** Let's compare which version of Tasks is ahead. */
@@ -183,7 +216,9 @@ class MainLayout extends React.Component {
                     <Content style={{ padding: '0 50px', marginTop: '50px' }}>
                         <Layout style={{ padding: '24px 0', background: '#fff' }}>
                             <Sidebar
-                                onReset={this.resetAllTasks} />
+                                onReset={this.resetAllTasks}
+                                onExport={this.exportTasks}
+                            />
                             <Content style={{ padding: '0 24px', minHeight: 280 }}>
                                 {/* Time */}
                                 <Timer
