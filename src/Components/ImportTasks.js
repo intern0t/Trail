@@ -1,40 +1,40 @@
+/*eslint-disable no-unused-vars*/
 import React from 'react';
 import { Modal, Upload, Icon, message } from 'antd';
 const Dragger = Upload.Dragger;
 
 class ImportTasks extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            src: null,
-        }
-    }
-    render() {
-        const { visible, onCancel, onCreate } = this.props;
+    onTaskImport = (importedTasks) => {
+        // onImport()
+        console.log(JSON.parse(importedTasks));
+    };
 
-        const props = {
+    render() {
+        const { visible, onCancel, onCreate, onImport } = this.props;
+
+        const poops = {
             name: 'file',
             multiple: false,
             accept: '.json',
-            action: '//jsonplaceholder.typicode.com/posts/',
+            action: '//jsonplaceholder.typicode.com/posts/',    // Random action URL, a placeholder.
 
             onChange(info) {
-                const status = info.file.status;
-                if (status !== 'uploading') {
+                // Not really required but for debugging purposes.
+                if (info.file.status !== 'uploading') {
                     console.log(info.file, info.fileList);
                 }
-                if (status === 'done') {
-                    message.success(`${info.file.name} file uploaded successfully.`);
-                    /** This is where the fuck up's occuring, in localhost! */
-                    let reader = new FileReader();
-                    const fileAsBlob = new Blob([info.fileList[0]], { type: 'text/json' });
-                    reader.onload = function (e) {
-                        console.log(e.target.result);
-                    }
-                    reader.readAsText(fileAsBlob);
-                } else if (status === 'error') {
+                if (info.file.status === 'done') {
+                    let fileReader = new FileReader();
+                    fileReader.onload = function (fileLoadedEvent) {
+                        let textFromFileLoaded = fileLoadedEvent.target.result;
+                        onImport(textFromFileLoaded);
+                    };
+                    // `originFileObj`, most important.
+                    fileReader.readAsText(info.fileList[0].originFileObj);
+                } else if (info.file.status === 'error') {
                     message.error(`${info.file.name} file upload failed.`);
                 }
+                return false;
             },
         };
 
@@ -46,10 +46,7 @@ class ImportTasks extends React.Component {
                 onCancel={onCancel}
                 onOk={onCreate}
             >
-                <div className='fileContents'>
-                    {this.state.src}
-                </div>
-                <Dragger {...props}>
+                <Dragger {...poops}>
                     <p className="ant-upload-drag-icon">
                         <Icon type="file-add" />
                     </p>

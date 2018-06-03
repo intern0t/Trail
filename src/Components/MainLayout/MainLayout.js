@@ -177,14 +177,38 @@ class MainLayout extends React.Component {
 
     };
 
+    /** Simply validating our imported JSON file. */
+    validateImportedJSONFile = (importedFileContents) => {
+        try {
+            JSON.parse(importedFileContents);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    };
+
     /** Importing a Task list. */
-    importTasks = () => { };
+    importTasks = (importedTasks) => {
+        if (this.validateImportedJSONFile(importedTasks)) {
+            const _importedTasks = JSON.parse(importedTasks);
+            const statesToUpdate = { Tasks: _importedTasks, importTasksFormVisible: false };
+            this.setState(state => ({
+                ...state, ...statesToUpdate
+            }));
+
+            /** Set localStorage as well. */
+            localStorage.setItem("Tasks", JSON.stringify(this.state.Tasks));
+            message.success("Successfully imported your Tasks file.");
+        } else {
+            message.error("Sorry, the Tasks file you imported isn't not a valid JSON file.");
+        }
+    };
 
     importTaskFormHandleCancel = () => {
         this.setState(state => ({
             ...state, importTasksFormVisible: !this.state.importTasksFormVisible,
         }));
-    }
+    };
 
     componentWillMount() {
         // Load our tasks from storage.
@@ -206,8 +230,8 @@ class MainLayout extends React.Component {
 
     render() {
         const WrappedNewTaskForm = Form.create()(NewTask);
-        const WrappedEdiTaskForm = Form.create()(EditTask);
-        const WrappedImportTsksForm = Form.create()(ImportTasks);
+        const WrappedEditTaskForm = Form.create()(EditTask);
+        const WrappedImportTasksForm = Form.create()(ImportTasks);
         const { Tasks } = this.state;
 
         return (
@@ -247,17 +271,16 @@ class MainLayout extends React.Component {
                                     onNewTaskCreated={this.newTaskCreated}
                                     currentTime={this.loggedTime}
                                 />
-                                <WrappedEdiTaskForm
+                                <WrappedEditTaskForm
                                     visible={this.state.editTaskFormVisible}
                                     onCancel={this.editTaskFormHandleCancel}
                                     taskToEdit={this.state.toEditTask}
                                     editTaskHandle={this.onTaskEdited}
                                 />
-                                <WrappedImportTsksForm
+                                <WrappedImportTasksForm
                                     visible={this.state.importTasksFormVisible}
                                     onCancel={this.importTaskFormHandleCancel}
-                                // taskToEdit={this.state.toEditTask}
-                                // onImportHandle={this.onTaskEdited}
+                                    onImport={this.importTasks}
                                 />
                                 <Divider orientation="left"><Icon type="profile" /> Your Recorded Tasks</Divider>
                                 <ListContainer
