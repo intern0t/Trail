@@ -43,7 +43,7 @@ class Sidebar extends React.Component {
     }
 
     render() {
-        const { onExport, } = this.props;
+        const { onExport, onImport } = this.props;
 
         return (
             <div>
@@ -69,7 +69,7 @@ class Sidebar extends React.Component {
                             title={<span><Icon type="hdd" /><span>Import/Export</span></span>}
                         >
                             <Menu.Item key="2">
-                                <Popconfirm title="Would you like to import pre-exported Tasks file?" onConfirm={onExport} okText="Yes" cancelText="No">
+                                <Popconfirm title="Would you like to import pre-exported Tasks file?" onConfirm={onImport} okText="Yes" cancelText="No">
                                     <span><Icon type="file-add" />Import</span>
                                 </Popconfirm>
                             </Menu.Item>

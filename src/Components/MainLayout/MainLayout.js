@@ -6,6 +6,7 @@ import Timer from '../Timer';
 import NewTask from '../NewTask';
 import { Layout, Icon, Divider, Button, Form, Tooltip, message } from 'antd';
 import EditTask from '../EditTask';
+import ImportTasks from '../ImportTasks';
 const { Content, Footer } = Layout;
 
 class MainLayout extends React.Component {
@@ -17,6 +18,7 @@ class MainLayout extends React.Component {
             toEditTask: null,
             newTaskFormVisible: false,
             editTaskFormVisible: false,
+            importTasksFormVisible: false,
         };
     }
 
@@ -178,6 +180,12 @@ class MainLayout extends React.Component {
     /** Importing a Task list. */
     importTasks = () => { };
 
+    importTaskFormHandleCancel = () => {
+        this.setState(state => ({
+            ...state, importTasksFormVisible: !this.state.importTasksFormVisible,
+        }));
+    }
+
     componentWillMount() {
         // Load our tasks from storage.
         /** Let's compare which version of Tasks is ahead. */
@@ -199,6 +207,7 @@ class MainLayout extends React.Component {
     render() {
         const WrappedNewTaskForm = Form.create()(NewTask);
         const WrappedEdiTaskForm = Form.create()(EditTask);
+        const WrappedImportTsksForm = Form.create()(ImportTasks);
         const { Tasks } = this.state;
 
         return (
@@ -218,6 +227,7 @@ class MainLayout extends React.Component {
                             <Sidebar
                                 onReset={this.resetAllTasks}
                                 onExport={this.exportTasks}
+                                onImport={this.importTaskFormHandleCancel}
                             />
                             <Content style={{ padding: '0 24px', minHeight: 280 }}>
                                 {/* Time */}
@@ -242,6 +252,12 @@ class MainLayout extends React.Component {
                                     onCancel={this.editTaskFormHandleCancel}
                                     taskToEdit={this.state.toEditTask}
                                     editTaskHandle={this.onTaskEdited}
+                                />
+                                <WrappedImportTsksForm
+                                    visible={this.state.importTasksFormVisible}
+                                    onCancel={this.importTaskFormHandleCancel}
+                                // taskToEdit={this.state.toEditTask}
+                                // onImportHandle={this.onTaskEdited}
                                 />
                                 <Divider orientation="left"><Icon type="profile" /> Your Recorded Tasks</Divider>
                                 <ListContainer
