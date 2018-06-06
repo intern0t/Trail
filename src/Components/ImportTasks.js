@@ -12,7 +12,7 @@ class ImportTasks extends React.Component {
     render() {
         const { visible, onCancel, onCreate, onImport } = this.props;
 
-        const poops = {
+        const props = {
             name: 'file',
             multiple: false,
             accept: '.json',
@@ -46,7 +46,7 @@ class ImportTasks extends React.Component {
                 onCancel={onCancel}
                 onOk={onCreate}
             >
-                <Dragger {...poops}>
+                <Dragger {...props}>
                     <p className="ant-upload-drag-icon">
                         <Icon type="file-add" />
                     </p>

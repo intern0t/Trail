@@ -12,7 +12,7 @@ Trail is a personal, open-source project developed using ReactJS which is intend
     * [x] Edit task
 2. Storing our tasks.
     * [x] Store our tasks in `localStorage`. I'll probably use this permanently as I have JSON Import/Export functionality planned. (*Remote storage, possible.*)
-    * [ ] Import and Export functionalities.
+    * [x] Import and Export functionalities.
         * [x] Exporting our Tasks with a filename of current date. (*Example: 2018-06-01.json*)
         * [x] Importing a pre-exported Tasks file (.**json**)
             * [x] Create drag & drop option?
