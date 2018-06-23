@@ -2,6 +2,10 @@
 Trail is a personal, open-source project developed using ReactJS which is intended to track your task completion at a given time, creating a collection of logs by the end of the day for you to be proud of.
 
 ---
+## Demo:
+1. [Github Pages](https://intern0t.github.io/Trail/)
+2. [Personal](https://trail.prashant.me/)
+---
 
 ### Remaining Task(s)
 1. Button **functionalities** for our task entry/entries.
