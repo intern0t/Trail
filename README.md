@@ -50,3 +50,6 @@ Trail is a personal, open-source project developed using ReactJS which is intend
 2. [VIM](https://en.wikipedia.org/wiki/Vim_(text_editor))
 3. [Yarn](https://yarnpkg.com/en/)
 4. [gh-pages module](https://www.npmjs.com/package/gh-pages)
+
+#### Contributors
+1. [dee-y](https://github.com/dee-y), designed Logo & rendered various sizes for later use + Icons. #4
