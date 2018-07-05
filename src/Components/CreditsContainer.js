@@ -1,6 +1,6 @@
 /*eslint-disable no-unused-vars*/
-import React from 'react';
-import { Modal, Icon, List } from 'antd';
+import React from "react";
+import { Modal, Icon, List } from "antd";
 
 class CreditsContainer extends React.Component {
     componentWillMount() {
@@ -10,7 +10,8 @@ class CreditsContainer extends React.Component {
             "Github - For hosting & deploying this project.",
             "Netlify - For handling DNS & serving this project.",
             "DevDocs - For being an amazing reference!",
-            "Freenode #reactjs - For clarifying me lots of things."
+            "Freenode #reactjs - For clarifying me lots of things.",
+            "Logo & Favicon designed by https://github.com/dee-y."
         ];
     }
 
@@ -23,12 +24,13 @@ class CreditsContainer extends React.Component {
                 title="Credits &amp; Special Thanks to .."
                 okText="Ok"
                 onCancel={onCancel}
-                onOk={onCancel}>
+                onOk={onCancel}
+            >
                 <List
                     size="small"
                     bordered
                     dataSource={this.data}
-                    renderItem={item => (<List.Item>{item}</List.Item>)}
+                    renderItem={item => <List.Item>{item}</List.Item>}
                 />
             </Modal>
         );
